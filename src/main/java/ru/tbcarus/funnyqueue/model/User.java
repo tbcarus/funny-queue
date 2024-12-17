@@ -16,6 +16,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.util.CollectionUtils;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -48,11 +49,8 @@ public class User extends AbstractBaseEntity implements UserDetails {
     @Column(name = "role")
     private Set<Role> roles = new HashSet<>();
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-    private List<Record> queueToOther;
-
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-    private List<Record> queueToMe;
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    Queue myQueue;
 
     @CreationTimestamp
     @Column(name = "create_date")

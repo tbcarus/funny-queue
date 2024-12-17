@@ -1,32 +1,31 @@
 package ru.tbcarus.funnyqueue.model;
 
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.ToString;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.Year;
-import java.util.List;
 
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
-@Table(name = "records")
-public class Record extends AbstractBaseEntity {
+@Table(name = "slots")
+public class Slot extends AbstractBaseEntity {
 
     @ToString.Exclude
     @ManyToOne
+    @JoinColumn(name = "queue_id", nullable = false)
+    private Queue queue;
+
+    @ToString.Exclude
+    @OneToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @ToString.Exclude
-    @ManyToOne
-    @JoinColumn(name = "queue_owner_id", nullable = false)
-    private User queueOwner;
-
-    @Column(name = "date_time")
+    @Column(name = "date_time", unique = true)
     private LocalDateTime dateTime;
 
     @CreationTimestamp
@@ -36,6 +35,5 @@ public class Record extends AbstractBaseEntity {
     @UpdateTimestamp
     @Column(name = "last_update")
     private LocalDateTime lastUpdate;
-
 
 }
