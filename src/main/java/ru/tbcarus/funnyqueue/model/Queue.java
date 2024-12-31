@@ -1,5 +1,8 @@
 package ru.tbcarus.funnyqueue.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -26,12 +29,15 @@ public class Queue extends AbstractBaseEntity {
     @ToString.Exclude
     @OneToOne()
     @JoinColumn(name = "user_id")
+    @JsonBackReference
     User user;
 
-    @OneToMany(mappedBy = "queue", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "queue", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JsonManagedReference
     List<Slot> slots;
 
-    @OneToMany(mappedBy = "queue", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "queue", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JsonManagedReference
     List<Break> breaks;
 
     @Column(name = "work_start_time")

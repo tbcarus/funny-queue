@@ -1,5 +1,7 @@
 package ru.tbcarus.funnyqueue.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
@@ -22,6 +24,7 @@ public class Break extends AbstractBaseEntity {
     @ToString.Exclude
     @ManyToOne
     @JoinColumn(name = "queue_id", nullable = false)
+    @JsonBackReference
     private Queue queue;
 
     @NotNull

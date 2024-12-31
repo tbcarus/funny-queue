@@ -1,5 +1,7 @@
 package ru.tbcarus.funnyqueue.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -18,11 +20,13 @@ public class Slot extends AbstractBaseEntity {
     @ToString.Exclude
     @ManyToOne
     @JoinColumn(name = "queue_id", nullable = false)
+    @JsonBackReference
     private Queue queue;
 
     @ToString.Exclude
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
+    @JsonBackReference
     private User user;
 
     @Column(name = "date_time", unique = true)

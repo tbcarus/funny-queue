@@ -1,5 +1,8 @@
 package ru.tbcarus.funnyqueue.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -50,7 +53,12 @@ public class User extends AbstractBaseEntity implements UserDetails {
     private Set<Role> roles = new HashSet<>();
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonManagedReference
     Queue myQueue;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JsonManagedReference
+    List<Slot> slots;
 
     @CreationTimestamp
     @Column(name = "create_date")
@@ -76,14 +84,17 @@ public class User extends AbstractBaseEntity implements UserDetails {
         }
     }
 
+    @JsonIgnore
     public boolean isUser() {
         return roles.contains(Role.USER);
     }
 
+    @JsonIgnore
     public boolean isAdmin() {
         return roles.contains(Role.ADMIN);
     }
 
+    @JsonIgnore
     public boolean isSuperUser() {
         return roles.contains(Role.SUPERUSER);
     }
@@ -97,6 +108,7 @@ public class User extends AbstractBaseEntity implements UserDetails {
     }
 
     @Override
+    @JsonIgnore
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return roles
                 .stream()
@@ -105,21 +117,25 @@ public class User extends AbstractBaseEntity implements UserDetails {
     }
 
     @Override
+    @JsonIgnore
     public String getUsername() {
         return email;
     }
 
     @Override
+    @JsonIgnore
     public boolean isAccountNonExpired() {
         return true;
     }
 
     @Override
+    @JsonIgnore
     public boolean isAccountNonLocked() {
         return true;
     }
 
     @Override
+    @JsonIgnore
     public boolean isCredentialsNonExpired() {
         return true;
     }
