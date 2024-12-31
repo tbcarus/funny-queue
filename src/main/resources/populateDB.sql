@@ -19,6 +19,9 @@ VALUES (1, 'USER'),
 INSERT INTO queues(id, name, user_id)
 VALUES (1, 'FIRST QUEUE', 2);
 
+INSERT INTO breaks(name, queue_id, start_time, end_time)
+VALUES ('lunch', 1, '13:00', '14:00');
+
 INSERT INTO slots (queue_id, user_id, date_time)
 VALUES (1, 1, '2024-12-16 08:30:00.000000'),
        (1, 1, '2024-12-17 09:30:00.000000'),

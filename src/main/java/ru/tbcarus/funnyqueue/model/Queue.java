@@ -31,20 +31,14 @@ public class Queue extends AbstractBaseEntity {
     @OneToMany(mappedBy = "queue", cascade = CascadeType.ALL)
     List<Slot> slots;
 
+    @OneToMany(mappedBy = "queue", cascade = CascadeType.ALL)
+    List<Break> breaks;
+
     @Column(name = "work_start_time")
     private LocalTime WorkStartTime;
 
     @Column(name = "work_end_time")
     private LocalTime WorkEndTime;
-
-    @Column(name = "lunch_start_time")
-    private LocalTime LunchStartTime;
-
-    @Column(name = "queue_start_time")
-    private LocalTime QueueStartTime;
-
-    @Column(name = "queue_end_time")
-    private LocalTime QueueEndTime;
 
     @Column(name = "slot_time")
     Integer SlotTime; //в минутах
@@ -60,7 +54,8 @@ public class Queue extends AbstractBaseEntity {
     private LocalDateTime lastUpdate;
 
     public boolean isQueueAvailable() {
-        return !WorkStartTime.equals(WorkEndTime)
-                && WorkStartTime.isBefore(QueueStartTime) || WorkEndTime.isAfter(QueueEndTime);
+        // придумать что-нибудь для определения доступности. Что-нибудь вроде что есть свободное время для слотов,
+        // например, всё рабочее время не забито перерывами.
+        return true;
     }
 }
