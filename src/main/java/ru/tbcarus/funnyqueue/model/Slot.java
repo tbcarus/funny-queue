@@ -1,10 +1,11 @@
 package ru.tbcarus.funnyqueue.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
@@ -19,13 +20,14 @@ public class Slot extends AbstractBaseEntity {
 
     @ToString.Exclude
     @ManyToOne
-    @JoinColumn(name = "queue_id", nullable = false)
+    @JoinColumn(name = "queue_id")
     @JsonBackReference
     private Queue queue;
 
     @ToString.Exclude
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JoinColumn(name = "user_id")
     @JsonBackReference
     private User user;
 
@@ -33,7 +35,7 @@ public class Slot extends AbstractBaseEntity {
     private LocalDateTime dateTime;
 
     @CreationTimestamp
-    @Column(name = "create_date")
+    @Column(name = "create_date", updatable = false)
     private LocalDateTime createDate;
 
     @UpdateTimestamp
