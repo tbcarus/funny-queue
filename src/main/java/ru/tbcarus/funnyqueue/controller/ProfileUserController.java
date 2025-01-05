@@ -10,29 +10,20 @@ import ru.tbcarus.funnyqueue.service.UserService;
 
 @RestController
 @RequestMapping("/profile")
-public class UserController {
+public class ProfileUserController {
 
     @Autowired
     private UserService userService;
 
     @GetMapping
     public User getProfile(@AuthenticationPrincipal User user) {
-        return userService.getUserById(user.getId());
+        return userService.getUserByEmail(user.getEmail());
     }
 
-    @PostMapping()
+    @PostMapping
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void updateProfile(@RequestBody User toUpdate, @AuthenticationPrincipal User user) {
-        userService.updateUser(user.getId(), toUpdate);
+    public void updateProfile(@RequestBody UserDto userDto, @AuthenticationPrincipal User user) {
+        userService.updateUser(user.getEmail(), userDto);
     }
 
-    @GetMapping("/{id}")
-    public UserDto getUserById(@PathVariable int id, @AuthenticationPrincipal User user) {
-        return userService.getUserDtoById(id);
-    }
-
-    @GetMapping("/{email}")
-    public UserDto getUserById(@PathVariable String email, @AuthenticationPrincipal User user) {
-        return userService.getUserDtoByEmail(email);
-    }
 }

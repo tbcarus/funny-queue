@@ -29,7 +29,16 @@ import java.util.stream.Collectors;
 @Table(name = "users")
 @NoArgsConstructor
 @AllArgsConstructor
-public class User extends AbstractBaseEntity implements UserDetails {
+public class User implements UserDetails {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+
+    @JsonIgnore
+    public boolean isNew() {
+        return this.id == null;
+    }
 
     @NotBlank(message = "Имя не может быть пустым")
     @Size(min = 2, max = 128, message = "Длина имени от 2 до 128")

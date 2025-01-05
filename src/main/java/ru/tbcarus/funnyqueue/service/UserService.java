@@ -3,14 +3,20 @@ package ru.tbcarus.funnyqueue.service;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.tbcarus.funnyqueue.model.User;
+import ru.tbcarus.funnyqueue.model.dto.UserDto;
 import ru.tbcarus.funnyqueue.repository.UserRepository;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
-public class UserService {
+public class UserService implements UserDetailsService {
 
     @Autowired
     UserRepository userRepository;
@@ -33,8 +39,15 @@ public class UserService {
     }
 
     @Modifying
-    public void updateUser(int id, User user) {
-        userRepository.save(user);
+    @Transactional
+    public void updateUser(String email, UserDto userDto) {
+        User user = getUserByEmail(email);
+        if(userDto.getName() != null && !userDto.getName().isEmpty()) {
+            user.setName(userDto.getName());
+        }
+        if(userDto.getPassword() != null && !userDto.getPassword().isEmpty()) {
+            user.setPassword(userDto.getPassword());
+        }
     }
 
     @Modifying
@@ -52,5 +65,10 @@ public class UserService {
             return false;
         }
         return userRepository.existsById(id);
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return userRepository.findUserByEmail(username).orElseThrow(EntityNotFoundException::new);
     }
 }
