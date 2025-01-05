@@ -10,16 +10,21 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.tbcarus.funnyqueue.model.User;
 import ru.tbcarus.funnyqueue.model.dto.UserDto;
+import ru.tbcarus.funnyqueue.model.dto.UserMapper;
 import ru.tbcarus.funnyqueue.repository.UserRepository;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService implements UserDetailsService {
 
     @Autowired
     UserRepository userRepository;
+    
+    @Autowired
+    UserMapper userMapper;
 
     public List<User> getAll() {
         return userRepository.findAll();
@@ -70,5 +75,10 @@ public class UserService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return userRepository.findUserByEmail(username).orElseThrow(EntityNotFoundException::new);
+    }
+
+    public List<UserDto> getQueueOwners() {
+        List<User> users = userRepository.findAllQueueOwners();
+        return users.stream().map(u -> userMapper.toUserDto(u)).collect(Collectors.toList());
     }
 }

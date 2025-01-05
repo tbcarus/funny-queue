@@ -8,6 +8,8 @@ import ru.tbcarus.funnyqueue.model.User;
 import ru.tbcarus.funnyqueue.model.dto.UserDto;
 import ru.tbcarus.funnyqueue.service.UserService;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/profile")
 public class ProfileUserController {
@@ -20,10 +22,14 @@ public class ProfileUserController {
         return userService.getUserByEmail(user.getEmail());
     }
 
-    @PostMapping
+    @PutMapping
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void updateProfile(@RequestBody UserDto userDto, @AuthenticationPrincipal User user) {
         userService.updateUser(user.getEmail(), userDto);
     }
 
+    @GetMapping("/q-owners")
+    public List<UserDto> getQueueOwners(@AuthenticationPrincipal User user) {
+        return userService.getQueueOwners();
+    }
 }
