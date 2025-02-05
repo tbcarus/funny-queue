@@ -15,6 +15,8 @@ CREATE TABLE users
     last_update TIMESTAMP
 );
 
+CREATE UNIQUE INDEX users_email_uindex ON users (email);
+
 
 CREATE TABLE user_roles
 (
