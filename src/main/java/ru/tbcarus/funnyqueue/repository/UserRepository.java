@@ -20,4 +20,9 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 
     @Query("SELECT u FROM User u JOIN u.roles r WHERE r = 'SUPERUSER'")
     List<User> findAllQueueOwners();
+
+    boolean existsByEmail(String email);
+
+    @Query("SELECT u FROM User u WHERE u.email = LOWER(:email)")
+    Optional<User> findByEmailIgnoreCase(String email);
 }

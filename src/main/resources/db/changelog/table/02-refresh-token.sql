@@ -7,6 +7,6 @@ CREATE TABLE IF NOT EXISTS refresh_token
     token     VARCHAR(255) NOT NULL,
     user_name VARCHAR(255) NOT NULL,
     expires   TIMESTAMP    NOT NULL,
-    valid     BOOLEAN DEFAULT FALSE
+    revoked   BOOLEAN DEFAULT FALSE
 );
 CREATE INDEX refresh_token_user ON refresh_token (user_name);

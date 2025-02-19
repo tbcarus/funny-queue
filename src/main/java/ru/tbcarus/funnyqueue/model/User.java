@@ -23,10 +23,10 @@ import java.time.LocalTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
-@Data
 @Entity
-@Builder
 @Table(name = "users")
+@Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class User implements UserDetails {
@@ -44,10 +44,18 @@ public class User implements UserDetails {
     @Size(min = 2, max = 128, message = "Длина имени от 2 до 128")
     private String name;
 
-    @Email(message = "Неверный формат почты")
-    @NotBlank(message = "Не может быть пустым")
-    @Size(max = 128, message = "Максимальный размер 128")
+//    @Email(message = "Неверный формат почты")
+//    @NotBlank(message = "Не может быть пустым")
+//    @Size(max = 128, message = "Максимальный размер 128")
     private String email;
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
     @NotBlank(message = "Пароль не может быть пустым")
     @Size(min = 4, max = 128, message = "Длина от 4 до 128")

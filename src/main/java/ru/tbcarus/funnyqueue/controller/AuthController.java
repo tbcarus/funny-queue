@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import ru.tbcarus.funnyqueue.model.User;
 import ru.tbcarus.funnyqueue.model.dto.*;
+import ru.tbcarus.funnyqueue.service.AuthService;
 import ru.tbcarus.funnyqueue.service.UserService;
 
 @RestController
@@ -23,25 +24,25 @@ public class AuthController {
     public static final String LOGIN_URL = "/api/user/login";
     public static final String REFRESH_TOKEN_URL = "/api/user/refresh";
 
-    private final UserService userService;
+    private final AuthService authService;
 
     @Operation(summary = "User registration")
     @PostMapping(REGISTER_URL)
     public ResponseEntity<Void> register(@Validated @RequestBody UserRegisterDto userRegisterDto) {
-        User savedUser = userService.register(userRegisterDto);
+        User savedUser = authService.register(userRegisterDto);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @Operation(summary = "User authentication")
     @PostMapping(LOGIN_URL)
     public ResponseEntity<LoginResponse> login(@Validated @RequestBody LoginRequest loginRequest) {
-        return ResponseEntity.status(HttpStatus.OK).body(userService.login(loginRequest));
+        return ResponseEntity.status(HttpStatus.OK).body(authService.login(loginRequest));
     }
 
     @Operation(summary = "Take new access token")
     @PostMapping(REFRESH_TOKEN_URL)
     public ResponseEntity<RefreshResponse> refresh(@RequestBody RefreshRequest refreshRequest) {
-        return ResponseEntity.status(HttpStatus.OK).body(userService.refreshToken(refreshRequest.getRefreshToken()));
+        return ResponseEntity.status(HttpStatus.OK).body(authService.refreshToken(refreshRequest.getRefreshToken()));
     }
 
     @GetMapping(USER_URL+"/test")
